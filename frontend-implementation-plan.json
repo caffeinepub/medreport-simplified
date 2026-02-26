@@ -1,145 +1,32 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Pathological Report & Prescription Simplifier – Mobile App",
+  "title": "Replace MediClear app logo with uploaded image",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Design a mobile-first UI with a clean, medical-themed visual identity including company logo and consistent branding",
+      "summary": "Replace the current app logo image with the newly uploaded logo in AppHeader.tsx and SplashScreen.tsx, saving it as a static asset at frontend/public/assets/generated/app-logo.png",
       "acceptanceCriteria": [
-        "App layout is fully responsive and usable on mobile screen widths (320px–480px).",
-        "Company logo appears on the splash/home screen and in the app header.",
-        "Color palette and typography are consistent across all screens.",
-        "All interactive elements (buttons, inputs) are touch-friendly with appropriate tap target sizes."
+        "The new logo (dark background with stylized 'ab' letterform in dark red/charcoal) is visible in the AppHeader on all screens",
+        "The new logo is visible on the SplashScreen during app load animation",
+        "No references to the old logo remain in the codebase",
+        "The logo renders without distortion and at an appropriate size in both locations"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/index.css",
-          "operation": "modify",
-          "description": "Add medical-themed CSS custom properties for soft green and white color palette, define mobile-first responsive typography using clear sans-serif fonts, and establish touch-friendly sizing standards for interactive elements (minimum 44px tap targets)."
-        },
-        {
-          "path": "frontend/tailwind.config.js",
-          "operation": "modify",
-          "description": "Extend the Tailwind theme with custom colors (soft greens, whites, muted tones), configure mobile-first breakpoints, and add custom spacing utilities optimized for mobile card-based layouts."
+          "path": "frontend/public/assets/generated/app-logo.dim_256x256.png",
+          "operation": "create",
+          "description": "Save the converted logo image (from download.webp) as a clean PNG with transparent background, preserving the stylized dark charcoal and deep red 'ab' letterform with layered diamond accent below. Use the workspace file path frontend/public/assets/generated/app-logo.dim_256x256.png as specified in imageRequirements.edits."
         },
         {
           "path": "frontend/src/components/layout/AppHeader.tsx",
-          "operation": "create",
-          "description": "Create a mobile app header component that displays the MediClear company logo (frontend/public/assets/generated/logo.dim_256x256.png) consistently across all pages. Include navigation controls and ensure the header is fixed/sticky on mobile viewports."
-        },
-        {
-          "path": "frontend/src/components/layout/AppLayout.tsx",
-          "operation": "create",
-          "description": "Create a main layout wrapper component that incorporates AppHeader and provides consistent padding, safe-area handling for mobile devices, and card-based content containers. This layout will wrap all app screens."
+          "operation": "modify",
+          "description": "Update the logo image source to reference the new static asset at /assets/generated/app-logo.dim_256x256.png. Replace any existing logo import or src attribute with the new path. Ensure the logo image maintains appropriate sizing and links to the input screen as currently implemented."
         },
         {
           "path": "frontend/src/pages/SplashScreen.tsx",
-          "operation": "create",
-          "description": "Create a mobile splash screen that displays the MediClear logo (frontend/public/assets/generated/logo.dim_256x256.png) prominently centered over the splash background image (frontend/public/assets/generated/splash-bg.dim_1080x1920.png). Include a fade-in animation and auto-navigate to the input screen after 2-3 seconds."
-        },
-        {
-          "path": "frontend/src/App.tsx",
           "operation": "modify",
-          "description": "Wire the SplashScreen as the initial route, wrap all routes with AppLayout component, and configure the router to handle the splash-to-input navigation flow. Ensure all routes are mobile-optimized."
-        }
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "summary": "Provide an input screen with text areas for pathological reports and prescriptions plus a Simplify action button",
-      "acceptanceCriteria": [
-        "Two distinct labeled text input areas exist: one for pathological reports, one for doctor prescriptions.",
-        "At least one of the two fields must have content before the Convert action can be triggered.",
-        "A clearly labeled 'Simplify Report' button triggers the conversion flow.",
-        "Input fields scroll independently if content is long."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/InputScreen.tsx",
-          "operation": "create",
-          "description": "Create the main input screen with two labeled textarea components (one for pathological report, one for prescription). Implement validation requiring at least one field to have content before enabling the 'Simplify Report' button. Use mobile-optimized textarea styling with independent scrolling. On submit, collect both text values and navigate to the processing/results flow."
-        },
-        {
-          "path": "frontend/src/hooks/useReportSubmission.ts",
-          "operation": "create",
-          "description": "Create a custom hook that handles report submission logic. Accept reportText and prescriptionText as parameters, call the backend submitReport method with empty arrays for keyFindings, medications, and actionSteps (backend will process these), handle loading and error states, and return the generated ReportId for navigation to results."
-        },
-        {
-          "path": "frontend/src/App.tsx",
-          "operation": "modify",
-          "description": "Add route registration for /input (InputScreen) and wire it as the main destination after the splash screen."
-        }
-      ]
-    },
-    {
-      "id": "REQ-5",
-      "summary": "Display simplified summary on results screen with labeled sections and multi-language UI support",
-      "acceptanceCriteria": [
-        "Results screen shows the summary divided into at least three labeled sections.",
-        "A language selector dropdown/menu is visible on the results screen.",
-        "Selecting a language updates the UI labels and section headings to the chosen language.",
-        "Summary body text font size is at least 16px for readability.",
-        "A 'Back' button allows the user to return to the input screen."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/ResultsScreen.tsx",
-          "operation": "create",
-          "description": "Create the results screen that fetches and displays a simplified summary using the ReportId from route params. Render three clearly labeled sections: Key Findings (bullet list), Medications (name, purpose, dosage), and What To Do Next (action steps). Include a language selector dropdown at the top and a Back button to return to input screen. Ensure body text is minimum 16px and sections use card-based mobile layouts."
-        },
-        {
-          "path": "frontend/src/hooks/useLanguage.ts",
-          "operation": "create",
-          "description": "Create a custom hook that manages the current selected language state and provides a translation function for UI labels and section headings. Support at least: English, Hindi, Spanish, French, Arabic, and Bengali. Store language preference in localStorage for persistence."
-        },
-        {
-          "path": "frontend/src/i18n/translations.ts",
-          "operation": "create",
-          "description": "Define translation objects for all UI labels and section headings in the supported languages: English, Hindi, Spanish, French, Arabic, and Bengali. Include translations for: 'Key Findings', 'Medications', 'What To Do Next', 'Language', 'Back', and other UI labels used on the results screen."
-        },
-        {
-          "path": "frontend/src/hooks/useSummary.ts",
-          "operation": "create",
-          "description": "Create a custom hook that fetches a SimplifiedSummary from the backend using getSummary(reportId). Handle loading and error states, and return the structured summary data (keyFindings, medications, actionSteps) for display in ResultsScreen."
-        },
-        {
-          "path": "frontend/src/App.tsx",
-          "operation": "modify",
-          "description": "Add route registration for /results/:reportId (ResultsScreen) to display the simplified summary for a specific report."
-        }
-      ]
-    },
-    {
-      "id": "REQ-6",
-      "summary": "Provide a history screen listing all previously processed reports in reverse-chronological order",
-      "acceptanceCriteria": [
-        "History screen is accessible from the main navigation.",
-        "Each history entry displays the timestamp and a summary excerpt (first 100 characters).",
-        "Tapping an entry navigates to the full results view for that record.",
-        "History list is ordered newest-first.",
-        "If no records exist, a friendly empty-state message is displayed."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/HistoryScreen.tsx",
-          "operation": "create",
-          "description": "Create the history screen that fetches all report records using the backend getHistory method. Display each record as a tappable card showing the submission timestamp and the first 100 characters of the summary excerpt. Order entries newest-first. On tap, navigate to /results/:reportId. Show a friendly empty-state message if no records exist. Use mobile-optimized card layouts."
-        },
-        {
-          "path": "frontend/src/hooks/useHistory.ts",
-          "operation": "create",
-          "description": "Create a custom hook that fetches the report history list from the backend using getHistory(). Return an array of history entries with timestamp, excerpt, and reportId. Handle loading and error states."
-        },
-        {
-          "path": "frontend/src/components/layout/AppHeader.tsx",
-          "operation": "modify",
-          "description": "Add a navigation button or menu item in the header that links to the history screen (/history), making it accessible from all pages."
-        },
-        {
-          "path": "frontend/src/App.tsx",
-          "operation": "modify",
-          "description": "Add route registration for /history (HistoryScreen) and ensure it is accessible via navigation from AppHeader."
+          "description": "Update the logo image source to reference the new static asset at /assets/generated/app-logo.dim_256x256.png. Replace any existing logo import or src attribute with the new path. Ensure the logo image maintains appropriate sizing within the splash animation and renders without distortion."
         }
       ]
     }

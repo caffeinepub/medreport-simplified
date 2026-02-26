@@ -2,15 +2,11 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-design-a-mobile-first-ui-with-a-clean-medical-themed-visual-identity-use-a-calming-color-palette-e-g-soft-greens-and-whites-clear-sans-serif-typography-and-card-based-layouts-optimized-for-small-screens-display-a-company-logo-prominently-on-the-home-splash-screen-and-in-the-top-navigation-bar-consistently-across-all-pages",
-      "featureTitle": "Design a mobile-first UI with a clean, medical-themed visual identity. Use a calming color palette (e.g., soft greens and whites), clear sans-serif typography, and card-based layouts optimized for small screens. Display a company logo prominently on the home/splash screen and in the top navigation bar consistently across all pages.",
+      "featureId": "feature-replace-the-current-app-logo-image-with-the-newly-uploaded-logo-download-webp-in-both-appheader-tsx-and-splashscreen-tsx-save-the-new-logo-as-a-static-asset-at-frontend-public-assets-generated-app-logo-png-and-update-all-references-to-use-this-file",
+      "featureTitle": "Replace the current app logo image with the newly uploaded logo (download.webp) in both AppHeader.tsx and SplashScreen.tsx. Save the new logo as a static asset at frontend/public/assets/generated/app-logo.png and update all references to use this file.",
       "files": [
-        "frontend/src/App.tsx",
         "frontend/src/components/layout/AppHeader.tsx",
-        "frontend/src/components/layout/AppLayout.tsx",
-        "frontend/src/index.css",
-        "frontend/src/pages/SplashScreen.tsx",
-        "frontend/tailwind.config.js"
+        "frontend/src/pages/SplashScreen.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -21,66 +17,6 @@
       ],
       "testIds": [
         "REQ-1"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-provide-an-input-screen-where-users-can-type-or-paste-the-text-of-a-pathological-lab-report-and-or-a-general-doctor-s-prescription-into-separate-labeled-text-areas-include-a-clear-convert-or-simplify-action-button",
-      "featureTitle": "Provide an input screen where users can type or paste the text of a pathological lab report and/or a general doctor's prescription into separate labeled text areas. Include a clear 'Convert' or 'Simplify' action button.",
-      "files": [
-        "frontend/src/App.tsx",
-        "frontend/src/pages/InputScreen.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-2"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-display-the-generated-simplified-summary-on-a-dedicated-results-screen-the-summary-must-be-presented-in-clearly-labeled-sections-key-findings-medications-what-to-do-next-with-large-readable-text-include-a-language-selector-allowing-the-user-to-choose-their-preferred-display-language-from-at-least-english-hindi-spanish-french-arabic-and-bengali-the-section-headings-and-instructional-ui-text-must-render-in-the-selected-language",
-      "featureTitle": "Display the generated simplified summary on a dedicated results screen. The summary must be presented in clearly labeled sections (Key Findings, Medications, What To Do Next) with large, readable text. Include a language selector allowing the user to choose their preferred display language from at least: English, Hindi, Spanish, French, Arabic, and Bengali. The section headings and instructional UI text must render in the selected language.",
-      "files": [
-        "frontend/src/App.tsx",
-        "frontend/src/hooks/useLanguage.ts",
-        "frontend/src/i18n/translations.ts",
-        "frontend/src/pages/ResultsScreen.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-5"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-provide-a-history-screen-that-lists-all-previously-processed-reports-in-reverse-chronological-order-each-list-item-should-show-the-submission-date-time-and-a-short-excerpt-of-the-simplified-summary-tapping-a-history-item-opens-the-full-simplified-summary-for-that-record",
-      "featureTitle": "Provide a history screen that lists all previously processed reports in reverse-chronological order. Each list item should show the submission date/time and a short excerpt of the simplified summary. Tapping a history item opens the full simplified summary for that record.",
-      "files": [
-        "frontend/src/App.tsx",
-        "frontend/src/components/layout/AppHeader.tsx",
-        "frontend/src/pages/HistoryScreen.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-6"
       ],
       "confidence": "high"
     }

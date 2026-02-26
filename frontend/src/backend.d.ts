@@ -23,7 +23,9 @@ export interface Medication {
     purpose: string;
 }
 export interface backendInterface {
-    getHistory(): Promise<Array<[Time, string, ReportId]>>;
+    deleteReport(reportId: ReportId): Promise<void>;
+    getHistory(): Promise<Array<[Time, string, ReportId, boolean]>>;
     getSummary(reportId: ReportId): Promise<SimplifiedSummary>;
     submitReport(reportText: string, prescriptionText: string, keyFindings: Array<string>, medications: Array<Medication>, actionSteps: Array<ActionStep>): Promise<ReportId>;
+    toggleBookmark(reportId: ReportId): Promise<void>;
 }

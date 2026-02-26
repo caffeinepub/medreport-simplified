@@ -1,16 +1,17 @@
 {
   "frontend/src/index.css": "Global styles with a medical teal-green OKLCH color system, custom Inter/Nunito fonts, mobile-first utilities (safe-area, tap-target), animation keyframes, and component classes for the MediClear app.",
   "frontend/tailwind.config.js": "Extended Tailwind config with Inter/Nunito font families, medical teal-green color tokens, enhanced border-radius scale, card shadows, and mobile-optimized container settings.",
-  "frontend/src/i18n/translations.ts": "Complete translation objects for 6 languages (English, Hindi, Spanish, French, Arabic, Bengali) covering all UI labels, section headings, and messages used throughout the app.",
+  "frontend/src/i18n/translations.ts": "Complete translation objects for 6 languages covering all UI labels including new keys for bookmark, share, delete confirmation, search, favourites filter, font size controls, tabs, and original input display.",
   "frontend/src/lib/medicalSimplifier.ts": "Client-side medical term simplification engine with a deduplicated 150+ term glossary (fixed duplicate keys for `folic acid`, `ot`, and `pt`), functions to extract key findings, parse medications from prescriptions with explicit `string[]` typing for `dosageParts`, and generate actionable health steps.",
   "frontend/src/hooks/useLanguage.ts": "Custom hook managing the selected display language with localStorage persistence, returning the current language, setter, and translated strings object.",
-  "frontend/src/hooks/useQueries.ts": "React Query hooks for all backend operations: fetching history list, fetching a single summary by ID, and submitting a new report with mutation and cache invalidation.",
-  "frontend/src/components/layout/AppHeader.tsx": "Sticky mobile app header with MediClear logo, dynamic title, back/history/new navigation buttons, and gradient styling consistent across all screens.",
+  "frontend/src/hooks/useQueries.ts": "React Query hooks for all backend operations — fetching history (now typed as 4-tuple with isBookmarked), fetching a single summary, submitting a report, toggling bookmark, and deleting a report with cache invalidation.",
+  "frontend/src/components/layout/AppHeader.tsx": "Sticky mobile app header with the new MediClear logo image (referencing app-logo.dim_256x256.png), dynamic title, back/history/new navigation buttons, and gradient styling consistent across all screens.",
   "frontend/src/components/layout/AppLayout.tsx": "Layout wrapper composing AppHeader with consistent mobile padding, max-width container, and flexible content area for all app screens.",
-  "frontend/src/pages/SplashScreen.tsx": "Animated splash screen displaying the MediClear logo and branding over a gradient background, auto-navigating to the input screen after 2.8 seconds.",
-  "frontend/src/pages/InputScreen.tsx": "Main input screen with two labeled textareas for pathological reports and prescriptions, client-side simplification on submit, validation, loading states, and footer attribution.",
-  "frontend/src/pages/ResultsScreen.tsx": "Results screen displaying simplified summary in three labeled card sections (Key Findings, Medications, What To Do Next) with language selector dropdown, copy-to-clipboard, and RTL support.",
-  "frontend/src/pages/HistoryScreen.tsx": "History screen listing all processed reports newest-first as tappable cards with timestamps and excerpts, empty state, loading skeletons, and error handling.",
-  "frontend/src/App.tsx": "TanStack Router setup with four routes (splash, input, results/:reportId, history) and RouterProvider wrapping the entire application.",
-  "frontend/index.html": "HTML entry point with mobile-optimized viewport meta tags, PWA-ready apple-mobile-web-app settings, theme color, and font preconnect links."
+  "frontend/src/pages/SplashScreen.tsx": "Animated splash screen displaying the new MediClear logo image (referencing app-logo.dim_256x256.png) and branding over a gradient background, auto-navigating to the input screen after 2.8 seconds.",
+  "frontend/src/pages/InputScreen.tsx": "Input screen that saves original report and prescription texts to localStorage (keyed by reportId) immediately after successful submission so the ResultsScreen Original Input tab can display them.",
+  "frontend/src/pages/ResultsScreen.tsx": "Results screen with bookmark toggle, Web Share API share button, copy button, font size A-/A/A+ controls, and two tabs (Simplified Summary and Original Input); original texts are read from localStorage where they were saved on submission.",
+  "frontend/src/pages/HistoryScreen.tsx": "History screen with real-time search bar, favourites-only toggle, per-item delete button with AlertDialog confirmation, and filled star icons next to bookmarked reports; uses useDeleteReport and useLanguage hooks.",
+  "frontend/src/App.tsx": "TanStack Router setup with four routes and a Sonner Toaster added to the root layout for toast notifications across all screens.",
+  "frontend/index.html": "HTML entry point with mobile-optimized viewport meta tags, PWA-ready apple-mobile-web-app settings, theme color, and font preconnect links.",
+  "frontend/src/hooks/useFontSize.ts": "Custom hook managing font size preference (small/medium/large) with localStorage persistence, returning the current size, setter, and CSS class maps."
 }

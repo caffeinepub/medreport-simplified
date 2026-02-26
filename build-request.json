@@ -1,146 +1,42 @@
 {
   "kind": "build_request",
-  "title": "Pathological Report & Prescription Simplifier – Mobile App",
+  "title": "Replace MediClear app logo with uploaded image",
   "projectName": "MediClear",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Design a mobile-first UI with a clean, medical-themed visual identity. Use a calming color palette (e.g., soft greens and whites), clear sans-serif typography, and card-based layouts optimized for small screens. Display a company logo prominently on the home/splash screen and in the top navigation bar consistently across all pages.",
+      "text": "Replace the current app logo image with the newly uploaded logo (download.webp) in both AppHeader.tsx and SplashScreen.tsx. Save the new logo as a static asset at frontend/public/assets/generated/app-logo.png and update all references to use this file.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-2"
+          "msg-1"
         ],
         "quotes": [
-          "kindly try to converted into a mobile base application with the company logo"
+          "change the logo of mediclear"
         ]
       },
       "acceptanceCriteria": [
-        "App layout is fully responsive and usable on mobile screen widths (320px–480px).",
-        "Company logo appears on the splash/home screen and in the app header.",
-        "Color palette and typography are consistent across all screens.",
-        "All interactive elements (buttons, inputs) are touch-friendly with appropriate tap target sizes."
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "text": "Provide an input screen where users can type or paste the text of a pathological lab report and/or a general doctor's prescription into separate labeled text areas. Include a clear 'Convert' or 'Simplify' action button.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "Take any pathological report and general doctor prescription"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Two distinct labeled text input areas exist: one for pathological reports, one for doctor prescriptions.",
-        "At least one of the two fields must have content before the Convert action can be triggered.",
-        "A clearly labeled 'Simplify Report' button triggers the conversion flow.",
-        "Input fields scroll independently if content is long."
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "text": "Store submitted reports and their simplified summaries in the backend. Each record should capture: a unique ID, submission timestamp, the original report text, the original prescription text, and the generated simplified summary text.",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "pathological report conversion into a standard summary and it should be standardized"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Backend actor exposes a function to save a new report record with all required fields.",
-        "Backend actor exposes a function to retrieve all saved records.",
-        "Backend actor exposes a function to retrieve a single record by its unique ID.",
-        "Records persist across canister upgrades."
-      ]
-    },
-    {
-      "id": "REQ-4",
-      "text": "Implement a report simplification engine in the backend that processes the raw pathological report and prescription text and produces a standardized plain-language summary. The summary must: (a) list key findings in bullet points, (b) translate medical jargon into simple everyday words (e.g., 'hypertension' → 'high blood pressure'), (c) list medications with their purpose and basic dosage instruction in plain terms, and (d) include a 'What to do next' section with actionable steps.",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "pathological report conversion into a standard summary and it should be standardized",
-          "integrate it in a simple language so any non english speaking person can understand that"
-        ]
-      },
-      "acceptanceCriteria": [
-        "The simplification function accepts report text and prescription text as inputs and returns a structured summary.",
-        "Output summary contains clearly separated sections: Key Findings, Medications, and What To Do Next.",
-        "Medical terms present in a predefined glossary are replaced with plain-language equivalents in the output.",
-        "The summary avoids unexplained abbreviations and Latin medical terms."
-      ]
-    },
-    {
-      "id": "REQ-5",
-      "text": "Display the generated simplified summary on a dedicated results screen. The summary must be presented in clearly labeled sections (Key Findings, Medications, What To Do Next) with large, readable text. Include a language selector allowing the user to choose their preferred display language from at least: English, Hindi, Spanish, French, Arabic, and Bengali. The section headings and instructional UI text must render in the selected language.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "integrate it in a simple language so any non english speaking person can understand that"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Results screen shows the summary divided into at least three labeled sections.",
-        "A language selector dropdown/menu is visible on the results screen.",
-        "Selecting a language updates the UI labels and section headings to the chosen language.",
-        "Summary body text font size is at least 16px for readability.",
-        "A 'Back' button allows the user to return to the input screen."
-      ]
-    },
-    {
-      "id": "REQ-6",
-      "text": "Provide a history screen that lists all previously processed reports in reverse-chronological order. Each list item should show the submission date/time and a short excerpt of the simplified summary. Tapping a history item opens the full simplified summary for that record.",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "pathological report conversion into a standard summary and it should be standardized"
-        ]
-      },
-      "acceptanceCriteria": [
-        "History screen is accessible from the main navigation.",
-        "Each history entry displays the timestamp and a summary excerpt (first 100 characters).",
-        "Tapping an entry navigates to the full results view for that record.",
-        "History list is ordered newest-first.",
-        "If no records exist, a friendly empty-state message is displayed."
+        "The new logo (dark background with stylized 'ab' letterform in dark red/charcoal) is visible in the AppHeader on all screens",
+        "The new logo is visible on the SplashScreen during app load animation",
+        "No references to the old logo remain in the codebase",
+        "The logo renders without distortion and at an appropriate size in both locations"
       ]
     }
   ],
   "constraints": [
-    "The app must be mobile-first; all screens must be fully usable on screens 320px–480px wide.",
-    "All user-facing text must be in English by default, with multilingual UI labels for the results screen.",
-    "No external AI or LLM APIs may be used; the simplification logic must be implemented within the Motoko backend using a rule-based/glossary approach.",
-    "All backend logic must reside in a single Motoko actor (backend/main.mo)."
+    "Do not modify files under frontend/src/hooks/ or frontend/src/components/ui/",
+    "Save the new logo as frontend/public/assets/generated/app-logo.png"
   ],
   "nonGoals": [
-    "Integration with hospital or laboratory systems via external APIs.",
-    "Optical Character Recognition (OCR) for scanning physical documents or images of reports.",
-    "User authentication or login (no Internet Identity in this version).",
-    "Real-time collaborative or shared report viewing.",
-    "Generating or printing PDF reports.",
-    "Diagnosis or medical advice — the app only simplifies and summarizes existing reports."
+    "Changing app color scheme or theme",
+    "Modifying backend logic",
+    "Updating any text branding or copy"
   ],
   "imageRequirements": {
-    "required": [
-      "MediClear company logo: a clean medical cross icon combined with a speech bubble, rendered in soft green and white on a transparent background (logo.dim_256x256.png)",
-      "Mobile app splash screen background: abstract soft gradient with subtle medical-themed line art (cells, heartbeat line) in muted green and off-white tones (splash-bg.dim_1080x1920.png)"
-    ],
-    "edits": []
+    "required": [],
+    "edits": [
+      "Convert and save the uploaded logo as a clean PNG with transparent background, preserving the stylized dark charcoal and deep red 'ab' letterform with layered diamond accent below (download.webp > app-logo.dim_256x256.png)"
+    ]
   }
 }

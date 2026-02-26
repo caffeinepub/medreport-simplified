@@ -1,11 +1,13 @@
 import Array "mo:core/Array";
 import Iter "mo:core/Iter";
-import List "mo:core/List";
 import Text "mo:core/Text";
+import Order "mo:core/Order";
+import List "mo:core/List";
 import Map "mo:core/Map";
 import Time "mo:core/Time";
-import Order "mo:core/Order";
 import Runtime "mo:core/Runtime";
+
+
 
 actor {
   type ReportId = Nat;
@@ -32,9 +34,8 @@ actor {
     originalReportText : Text;
     originalPrescriptionText : Text;
     simplifiedSummary : SimplifiedSummary;
+    isBookmarked : Bool;
   };
-
-  var nextId : ReportId = 1;
 
   module ReportRecord {
     public func compare(record1 : ReportRecord, record2 : ReportRecord) : Order.Order {
@@ -49,8 +50,9 @@ actor {
   };
 
   let records = Map.empty<ReportId, ReportRecord>();
+  var nextId : ReportId = 1;
 
-  // Add a new report and its simplified summary
+  // Add new report and summary
   public shared ({ caller }) func submitReport(reportText : Text, prescriptionText : Text, keyFindings : [Text], medications : [Medication], actionSteps : [ActionStep]) : async ReportId {
     let reportId = nextId;
     nextId += 1;
@@ -67,13 +69,13 @@ actor {
       originalReportText = reportText;
       originalPrescriptionText = prescriptionText;
       simplifiedSummary = summary;
+      isBookmarked = false;
     };
 
     records.add(reportId, record);
     reportId;
   };
 
-  // Get the full simplified summary for a specific report
   public query ({ caller }) func getSummary(reportId : ReportId) : async SimplifiedSummary {
     switch (records.get(reportId)) {
       case (null) {
@@ -85,8 +87,7 @@ actor {
     };
   };
 
-  // Get a list of all processed reports in reverse-chronological order
-  public query ({ caller }) func getHistory() : async [(Time.Time, Text, ReportId)] {
+  public query ({ caller }) func getHistory() : async [(Time.Time, Text, ReportId, Bool)] {
     records.values().toArray().sort().map(
       func(record) {
         let excerpt = if (record.simplifiedSummary.keyFindings.size() > 0) {
@@ -94,8 +95,27 @@ actor {
         } else {
           "";
         };
-        (record.timestamp, excerpt, record.id);
+        (record.timestamp, excerpt, record.id, record.isBookmarked);
       }
     );
+  };
+
+  public shared ({ caller }) func toggleBookmark(reportId : ReportId) : async () {
+    switch (records.get(reportId)) {
+      case (null) {
+        Runtime.trap("Could not find report with id " # reportId.toText());
+      };
+      case (?record) {
+        let updatedReport = { record with isBookmarked = not record.isBookmarked };
+        records.add(reportId, updatedReport);
+      };
+    };
+  };
+
+  public shared ({ caller }) func deleteReport(reportId : ReportId) : async () {
+    if (not records.containsKey(reportId)) {
+      Runtime.trap("Could not find report with id " # reportId.toText());
+    };
+    records.remove(reportId);
   };
 };

@@ -37,9 +37,9 @@ export function AppHeader({ showBack = false, showHistory = true, showNew = fals
               aria-label="Go to home"
             >
               <img
-                src="/assets/generated/logo.dim_256x256.png"
+                src="/assets/generated/app-logo.dim_256x256.png"
                 alt="MediClear Logo"
-                className="h-8 w-8 rounded-lg object-contain bg-white/10 p-0.5"
+                className="h-8 w-8 rounded-lg object-contain"
               />
             </button>
           )}
@@ -54,7 +54,7 @@ export function AppHeader({ showBack = false, showHistory = true, showNew = fals
           ) : (
             <button
               onClick={() => navigate({ to: '/input' })}
-              className="flex items-center justify-center gap-1.5"
+              className="flex items-center justify-center gap-2"
             >
               <span className="text-primary-foreground font-display font-bold text-lg tracking-tight">
                 MediClear

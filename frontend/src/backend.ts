@@ -105,13 +105,29 @@ export interface Medication {
     purpose: string;
 }
 export interface backendInterface {
-    getHistory(): Promise<Array<[Time, string, ReportId]>>;
+    deleteReport(reportId: ReportId): Promise<void>;
+    getHistory(): Promise<Array<[Time, string, ReportId, boolean]>>;
     getSummary(reportId: ReportId): Promise<SimplifiedSummary>;
     submitReport(reportText: string, prescriptionText: string, keyFindings: Array<string>, medications: Array<Medication>, actionSteps: Array<ActionStep>): Promise<ReportId>;
+    toggleBookmark(reportId: ReportId): Promise<void>;
 }
 export class Backend implements backendInterface {
     constructor(private actor: ActorSubclass<_SERVICE>, private _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, private _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, private processError?: (error: unknown) => never){}
-    async getHistory(): Promise<Array<[Time, string, ReportId]>> {
+    async deleteReport(arg0: ReportId): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.deleteReport(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.deleteReport(arg0);
+            return result;
+        }
+    }
+    async getHistory(): Promise<Array<[Time, string, ReportId, boolean]>> {
         if (this.processError) {
             try {
                 const result = await this.actor.getHistory();
@@ -150,6 +166,20 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.submitReport(arg0, arg1, arg2, arg3, arg4);
+            return result;
+        }
+    }
+    async toggleBookmark(arg0: ReportId): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.toggleBookmark(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.toggleBookmark(arg0);
             return result;
         }
     }

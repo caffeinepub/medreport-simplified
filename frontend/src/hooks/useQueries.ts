@@ -2,15 +2,15 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useActor } from './useActor';
 import type { SimplifiedSummary, ReportId, Medication, ActionStep } from '../backend';
 
-// Fetch all history records
+// Fetch all history records — returns [timestamp, excerpt, reportId, isBookmarked]
 export function useGetHistory() {
   const { actor, isFetching } = useActor();
 
-  return useQuery<Array<[bigint, string, bigint]>>({
+  return useQuery<Array<[bigint, string, bigint, boolean]>>({
     queryKey: ['history'],
     queryFn: async () => {
       if (!actor) return [];
-      return actor.getHistory();
+      return actor.getHistory() as Promise<Array<[bigint, string, bigint, boolean]>>;
     },
     enabled: !!actor && !isFetching,
   });
@@ -49,6 +49,38 @@ export function useSubmitReport() {
     mutationFn: async ({ reportText, prescriptionText, keyFindings, medications, actionSteps }) => {
       if (!actor) throw new Error('Backend not available');
       return actor.submitReport(reportText, prescriptionText, keyFindings, medications, actionSteps);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['history'] });
+    },
+  });
+}
+
+// Toggle bookmark/favourite state for a report
+export function useToggleBookmark() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation<void, Error, bigint>({
+    mutationFn: async (reportId: bigint) => {
+      if (!actor) throw new Error('Backend not available');
+      return actor.toggleBookmark(reportId);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['history'] });
+    },
+  });
+}
+
+// Delete a report by ID
+export function useDeleteReport() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation<void, Error, bigint>({
+    mutationFn: async (reportId: bigint) => {
+      if (!actor) throw new Error('Backend not available');
+      return actor.deleteReport(reportId);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['history'] });

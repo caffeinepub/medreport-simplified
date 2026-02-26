@@ -1,14 +1,12 @@
 # Specification
 
 ## Summary
-**Goal:** Build MediClear, a mobile-first app that lets users paste pathological lab reports and doctor prescriptions, then receive a plain-language simplified summary organized into Key Findings, Medications, and What To Do Next sections.
+**Goal:** Replace the MediClear app logo with the newly uploaded "ab" letterform logo.
 
 **Planned changes:**
-- Mobile-first UI with soft green/white medical theme, card-based layouts, and MediClear logo in the splash screen and top navigation bar
-- Input screen with two labeled text areas (pathological report and prescription) and a "Simplify Report" button
-- Rule-based/glossary simplification engine in the Motoko backend that translates medical jargon into plain language and structures output into three sections
-- Results screen displaying the structured summary with large readable text and a language selector (English, Hindi, Spanish, French, Arabic, Bengali) that updates UI labels and section headings
-- History screen listing all past reports in reverse-chronological order with timestamp and 100-character excerpt, tappable to view the full summary
-- Backend Motoko actor storing report records (ID, timestamp, original report text, original prescription text, simplified summary) with save and retrieval functions persisted across upgrades
+- Save the new logo as a static asset at `frontend/public/assets/generated/app-logo.png`
+- Update `AppHeader.tsx` to use the new logo image
+- Update `SplashScreen.tsx` to use the new logo image
+- Remove all references to the old logo
 
-**User-visible outcome:** Users can paste a medical report and/or prescription, receive an easy-to-understand plain-language summary in their preferred language, and browse previously simplified reports from a history list.
+**User-visible outcome:** The new dark-background "ab" letterform logo with deep red and charcoal styling appears in the app header and on the splash screen.

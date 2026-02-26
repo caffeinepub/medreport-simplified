@@ -24,12 +24,14 @@ export interface SimplifiedSummary {
 }
 export type Time = bigint;
 export interface _SERVICE {
-  'getHistory' : ActorMethod<[], Array<[Time, string, ReportId]>>,
+  'deleteReport' : ActorMethod<[ReportId], undefined>,
+  'getHistory' : ActorMethod<[], Array<[Time, string, ReportId, boolean]>>,
   'getSummary' : ActorMethod<[ReportId], SimplifiedSummary>,
   'submitReport' : ActorMethod<
     [string, string, Array<string>, Array<Medication>, Array<ActionStep>],
     ReportId
   >,
+  'toggleBookmark' : ActorMethod<[ReportId], undefined>,
 }
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];

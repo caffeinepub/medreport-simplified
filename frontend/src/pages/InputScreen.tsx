@@ -6,6 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { useSubmitReport } from '@/hooks/useQueries';
 import { simplifyReport } from '@/lib/medicalSimplifier';
+import { saveOriginalTexts } from './ResultsScreen';
 
 export function InputScreen() {
   const navigate = useNavigate();
@@ -35,6 +36,9 @@ export function InputScreen() {
         medications,
         actionSteps,
       });
+
+      // Persist original texts to localStorage for the Original Input tab
+      saveOriginalTexts(reportId.toString(), reportText, prescriptionText);
 
       navigate({ to: '/results/$reportId', params: { reportId: reportId.toString() } });
     } catch (err) {

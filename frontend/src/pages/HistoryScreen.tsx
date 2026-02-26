@@ -1,15 +1,41 @@
+import { useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
-import { Clock, ChevronRight, FileText, Inbox, AlertCircle, Loader2 } from 'lucide-react';
+import {
+  Clock,
+  ChevronRight,
+  FileText,
+  Inbox,
+  AlertCircle,
+  Star,
+  Trash2,
+  Search,
+  BookmarkCheck,
+  SearchX,
+} from 'lucide-react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/skeleton';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { AppLayout } from '@/components/layout/AppLayout';
-import { useGetHistory } from '@/hooks/useQueries';
+import { useGetHistory, useDeleteReport } from '@/hooks/useQueries';
+import { useLanguage } from '@/hooks/useLanguage';
 
 function formatTimestamp(nanoseconds: bigint): string {
-  // Convert nanoseconds to milliseconds
   const ms = Number(nanoseconds / BigInt(1_000_000));
   const date = new Date(ms);
-
   return date.toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'short',
@@ -28,15 +54,76 @@ function getExcerpt(text: string, maxLength = 100): string {
 
 export function HistoryScreen() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const { data: history, isLoading, isError, refetch } = useGetHistory();
+  const deleteReportMutation = useDeleteReport();
 
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showFavouritesOnly, setShowFavouritesOnly] = useState(false);
+  const [deletingId, setDeletingId] = useState<bigint | null>(null);
+
+  // Sort newest first
   const sortedHistory = history
     ? [...history].sort((a, b) => (a[0] > b[0] ? -1 : a[0] < b[0] ? 1 : 0))
     : [];
 
+  // Apply favourites filter
+  const afterFavFilter = showFavouritesOnly
+    ? sortedHistory.filter(([, , , isBookmarked]) => isBookmarked)
+    : sortedHistory;
+
+  // Apply search filter (case-insensitive, searches excerpt + date)
+  const filteredHistory = searchQuery.trim()
+    ? afterFavFilter.filter(([timestamp, excerpt]) => {
+        const q = searchQuery.toLowerCase();
+        const excerptMatch = excerpt.toLowerCase().includes(q);
+        const dateMatch = formatTimestamp(timestamp).toLowerCase().includes(q);
+        return excerptMatch || dateMatch;
+      })
+    : afterFavFilter;
+
+  const handleDelete = async (reportId: bigint) => {
+    setDeletingId(reportId);
+    try {
+      await deleteReportMutation.mutateAsync(reportId);
+      toast.success(t.reportDeleted);
+    } catch {
+      toast.error(t.error);
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
   return (
     <AppLayout title="Report History" showBack>
       <div className="pt-2">
+        {/* Search bar */}
+        <div className="relative mb-3 animate-fade-in">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+          <Input
+            type="search"
+            placeholder={t.searchPlaceholder}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-9 rounded-xl border-border bg-background/80 text-sm h-10"
+          />
+        </div>
+
+        {/* Favourites toggle */}
+        <div className="flex items-center gap-2 mb-4 animate-fade-in">
+          <Switch
+            id="fav-toggle"
+            checked={showFavouritesOnly}
+            onCheckedChange={setShowFavouritesOnly}
+            className="data-[state=checked]:bg-warning"
+          />
+          <Label htmlFor="fav-toggle" className="text-sm text-muted-foreground cursor-pointer flex items-center gap-1.5">
+            <Star className="h-3.5 w-3.5 text-warning" fill={showFavouritesOnly ? 'currentColor' : 'none'} />
+            {t.showFavouritesOnly}
+          </Label>
+        </div>
+
+        {/* Loading skeletons */}
         {isLoading && (
           <div className="space-y-3">
             {[1, 2, 3, 4].map((i) => (
@@ -52,6 +139,7 @@ export function HistoryScreen() {
           </div>
         )}
 
+        {/* Error state */}
         {isError && (
           <div className="flex flex-col items-center justify-center py-16 gap-4">
             <div className="bg-destructive/10 rounded-full p-4">
@@ -67,15 +155,16 @@ export function HistoryScreen() {
           </div>
         )}
 
+        {/* Empty state — no reports at all */}
         {!isLoading && !isError && sortedHistory.length === 0 && (
           <div className="flex flex-col items-center justify-center py-16 gap-4 animate-fade-in">
             <div className="bg-muted rounded-full p-6">
               <Inbox className="h-10 w-10 text-muted-foreground" />
             </div>
             <div className="text-center">
-              <p className="font-display font-bold text-foreground text-lg">No reports yet</p>
+              <p className="font-display font-bold text-foreground text-lg">{t.historyEmpty}</p>
               <p className="text-muted-foreground text-sm mt-1 max-w-[240px] leading-relaxed">
-                Your simplified reports will appear here after you process them.
+                {t.historyEmptySubtitle}
               </p>
             </div>
             <Button
@@ -87,16 +176,41 @@ export function HistoryScreen() {
           </div>
         )}
 
-        {!isLoading && !isError && sortedHistory.length > 0 && (
+        {/* Empty state — favourites filter active but none bookmarked */}
+        {!isLoading && !isError && sortedHistory.length > 0 && showFavouritesOnly && afterFavFilter.length === 0 && (
+          <div className="flex flex-col items-center justify-center py-12 gap-3 animate-fade-in">
+            <div className="bg-warning/10 rounded-full p-5">
+              <BookmarkCheck className="h-8 w-8 text-warning" />
+            </div>
+            <p className="text-muted-foreground text-sm text-center max-w-[260px] leading-relaxed">
+              {t.noFavourites}
+            </p>
+          </div>
+        )}
+
+        {/* Empty state — search yields no results */}
+        {!isLoading && !isError && sortedHistory.length > 0 && searchQuery.trim() && filteredHistory.length === 0 && (
+          <div className="flex flex-col items-center justify-center py-12 gap-3 animate-fade-in">
+            <div className="bg-muted rounded-full p-5">
+              <SearchX className="h-8 w-8 text-muted-foreground" />
+            </div>
+            <p className="text-muted-foreground text-sm text-center max-w-[260px] leading-relaxed">
+              {t.noSearchResults}
+            </p>
+          </div>
+        )}
+
+        {/* History list */}
+        {!isLoading && !isError && filteredHistory.length > 0 && (
           <div className="space-y-3 animate-fade-in">
             <p className="text-muted-foreground text-sm mb-4">
-              {sortedHistory.length} report{sortedHistory.length !== 1 ? 's' : ''} processed
+              {filteredHistory.length} report{filteredHistory.length !== 1 ? 's' : ''}
+              {searchQuery.trim() ? ' found' : ' processed'}
             </p>
-            {sortedHistory.map(([timestamp, excerpt, reportId], idx) => (
-              <button
+            {filteredHistory.map(([timestamp, excerpt, reportId, isBookmarked], idx) => (
+              <div
                 key={reportId.toString()}
-                onClick={() => navigate({ to: '/results/$reportId', params: { reportId: reportId.toString() } })}
-                className="w-full section-card flex items-start gap-3 text-left hover:shadow-card-hover active:scale-[0.98] transition-all duration-150 tap-target animate-slide-up"
+                className="section-card flex items-start gap-3 animate-slide-up hover:shadow-card-hover transition-all duration-150"
                 style={{ animationDelay: `${idx * 0.05}s`, opacity: 0 }}
               >
                 {/* Icon */}
@@ -104,13 +218,21 @@ export function HistoryScreen() {
                   <FileText className="h-5 w-5 text-primary" />
                 </div>
 
-                {/* Content */}
-                <div className="flex-1 min-w-0">
+                {/* Content — tappable area */}
+                <button
+                  onClick={() =>
+                    navigate({ to: '/results/$reportId', params: { reportId: reportId.toString() } })
+                  }
+                  className="flex-1 min-w-0 text-left"
+                >
                   <div className="flex items-center gap-1.5 mb-1">
                     <Clock className="h-3 w-3 text-muted-foreground flex-shrink-0" />
                     <span className="text-muted-foreground text-xs">
                       {formatTimestamp(timestamp)}
                     </span>
+                    {isBookmarked && (
+                      <Star className="h-3 w-3 text-warning ml-auto flex-shrink-0" fill="currentColor" />
+                    )}
                   </div>
                   <p className="text-foreground text-sm leading-relaxed line-clamp-2">
                     {getExcerpt(excerpt)}
@@ -118,11 +240,42 @@ export function HistoryScreen() {
                   <span className="text-primary text-xs font-medium mt-1.5 inline-block">
                     View full report →
                   </span>
-                </div>
+                </button>
 
-                {/* Arrow */}
-                <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0 mt-1" />
-              </button>
+                {/* Delete button with confirmation */}
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <button
+                      className="flex-shrink-0 p-1.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors tap-target"
+                      aria-label={t.deleteReport}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      {deletingId === reportId ? (
+                        <span className="h-4 w-4 border-2 border-destructive/30 border-t-destructive rounded-full animate-spin block" />
+                      ) : (
+                        <Trash2 className="h-4 w-4" />
+                      )}
+                    </button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent className="rounded-2xl mx-4">
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>{t.deleteConfirmTitle}</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        {t.deleteConfirmDescription}
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel className="rounded-xl">{t.deleteConfirmCancel}</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={() => handleDelete(reportId)}
+                        className="rounded-xl bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                      >
+                        {t.deleteConfirmAction}
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
             ))}
           </div>
         )}

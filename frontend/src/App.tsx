@@ -1,4 +1,5 @@
 import { RouterProvider, createRouter, createRoute, createRootRoute, Outlet } from '@tanstack/react-router';
+import { Toaster } from '@/components/ui/sonner';
 import { SplashScreen } from './pages/SplashScreen';
 import { InputScreen } from './pages/InputScreen';
 import { ResultsScreen } from './pages/ResultsScreen';
@@ -6,7 +7,12 @@ import { HistoryScreen } from './pages/HistoryScreen';
 
 // Root route with outlet
 const rootRoute = createRootRoute({
-  component: () => <Outlet />,
+  component: () => (
+    <>
+      <Outlet />
+      <Toaster position="bottom-center" richColors />
+    </>
+  ),
 });
 
 // Splash screen (default/home)

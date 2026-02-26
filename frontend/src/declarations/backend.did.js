@@ -8,8 +8,8 @@
 
 import { IDL } from '@icp-sdk/core/candid';
 
-export const Time = IDL.Int;
 export const ReportId = IDL.Nat;
+export const Time = IDL.Int;
 export const ActionStep = IDL.Record({ 'description' : IDL.Text });
 export const Medication = IDL.Record({
   'dosage' : IDL.Text,
@@ -23,9 +23,10 @@ export const SimplifiedSummary = IDL.Record({
 });
 
 export const idlService = IDL.Service({
+  'deleteReport' : IDL.Func([ReportId], [], []),
   'getHistory' : IDL.Func(
       [],
-      [IDL.Vec(IDL.Tuple(Time, IDL.Text, ReportId))],
+      [IDL.Vec(IDL.Tuple(Time, IDL.Text, ReportId, IDL.Bool))],
       ['query'],
     ),
   'getSummary' : IDL.Func([ReportId], [SimplifiedSummary], ['query']),
@@ -40,13 +41,14 @@ export const idlService = IDL.Service({
       [ReportId],
       [],
     ),
+  'toggleBookmark' : IDL.Func([ReportId], [], []),
 });
 
 export const idlInitArgs = [];
 
 export const idlFactory = ({ IDL }) => {
-  const Time = IDL.Int;
   const ReportId = IDL.Nat;
+  const Time = IDL.Int;
   const ActionStep = IDL.Record({ 'description' : IDL.Text });
   const Medication = IDL.Record({
     'dosage' : IDL.Text,
@@ -60,9 +62,10 @@ export const idlFactory = ({ IDL }) => {
   });
   
   return IDL.Service({
+    'deleteReport' : IDL.Func([ReportId], [], []),
     'getHistory' : IDL.Func(
         [],
-        [IDL.Vec(IDL.Tuple(Time, IDL.Text, ReportId))],
+        [IDL.Vec(IDL.Tuple(Time, IDL.Text, ReportId, IDL.Bool))],
         ['query'],
       ),
     'getSummary' : IDL.Func([ReportId], [SimplifiedSummary], ['query']),
@@ -77,6 +80,7 @@ export const idlFactory = ({ IDL }) => {
         [ReportId],
         [],
       ),
+    'toggleBookmark' : IDL.Func([ReportId], [], []),
   });
 };
 

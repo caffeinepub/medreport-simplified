@@ -38,11 +38,11 @@ export function SplashScreen() {
         {/* Logo */}
         <div className="relative">
           <div className="absolute inset-0 rounded-3xl bg-white/20 blur-xl scale-110" />
-          <div className="relative bg-white/15 backdrop-blur-sm rounded-3xl p-5 border border-white/30 shadow-2xl">
+          <div className="relative rounded-3xl p-2 shadow-2xl">
             <img
-              src="/assets/generated/logo.dim_256x256.png"
+              src="/assets/generated/app-logo.dim_256x256.png"
               alt="MediClear Logo"
-              className="w-24 h-24 object-contain"
+              className="w-28 h-28 object-contain rounded-2xl"
             />
           </div>
         </div>
