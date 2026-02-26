@@ -1,0 +1,93 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "A mobile application that converts pathological reports and general doctor prescriptions into standardized, simplified summaries in plain language accessible to non-English speakers. The app will feature a company logo and be designed for mobile use.",
+  "architectural_notes": [
+    "Mobile-first application design targeting non-English speaking users",
+    "Core functionality: parse and summarize pathological reports and doctor prescriptions using simplified language",
+    "Multilingual output is a key requirement — consider integration with translation APIs"
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "imageRequirements": "## Required Images\n- MediClear company logo: a clean medical cross icon combined with a speech bubble, rendered in soft green and white on a transparent background (logo.dim_256x256.png)\n- Mobile app splash screen background: abstract soft gradient with subtle medical-themed line art (cells, heartbeat line) in muted green and off-white tones (splash-bg.dim_1080x1920.png)",
+  "existing_features": [
+    {
+      "id": "feature-design-a-mobile-first-ui-with-a-clean-medical-themed-visual-identity-use-a-calming-color-palette-e-g-soft-greens-and-whites-clear-sans-serif-typography-and-card-based-layouts-optimized-for-small-screens-display-a-company-logo-prominently-on-the-home-splash-screen-and-in-the-top-navigation-bar-consistently-across-all-pages",
+      "title": "Design a mobile-first UI with a clean, medical-themed visual identity. Use a calming color palette (e.g., soft greens and whites), clear sans-serif typography, and card-based layouts optimized for small screens. Display a company logo prominently on the home/splash screen and in the top navigation bar consistently across all pages.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-provide-an-input-screen-where-users-can-type-or-paste-the-text-of-a-pathological-lab-report-and-or-a-general-doctor-s-prescription-into-separate-labeled-text-areas-include-a-clear-convert-or-simplify-action-button",
+      "title": "Provide an input screen where users can type or paste the text of a pathological lab report and/or a general doctor's prescription into separate labeled text areas. Include a clear 'Convert' or 'Simplify' action button.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-display-the-generated-simplified-summary-on-a-dedicated-results-screen-the-summary-must-be-presented-in-clearly-labeled-sections-key-findings-medications-what-to-do-next-with-large-readable-text-include-a-language-selector-allowing-the-user-to-choose-their-preferred-display-language-from-at-least-english-hindi-spanish-french-arabic-and-bengali-the-section-headings-and-instructional-ui-text-must-render-in-the-selected-language",
+      "title": "Display the generated simplified summary on a dedicated results screen. The summary must be presented in clearly labeled sections (Key Findings, Medications, What To Do Next) with large, readable text. Include a language selector allowing the user to choose their preferred display language from at least: English, Hindi, Spanish, French, Arabic, and Bengali. The section headings and instructional UI text must render in the selected language.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-provide-a-history-screen-that-lists-all-previously-processed-reports-in-reverse-chronological-order-each-list-item-should-show-the-submission-date-time-and-a-short-excerpt-of-the-simplified-summary-tapping-a-history-item-opens-the-full-simplified-summary-for-that-record",
+      "title": "Provide a history screen that lists all previously processed reports in reverse-chronological order. Each list item should show the submission date/time and a short excerpt of the simplified summary. Tapping a history item opens the full simplified summary for that record.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Upload or input pathological reports and doctor prescriptions",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Convert medical reports into standardized, simplified plain-language summaries",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Multilingual support so non-English speakers can understand the summaries",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Mobile-first UI with company logo branding",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Store submitted reports and their simplified summaries in the backend. Each record should capture: a unique ID, submission timestamp, the original report text, the original prescription text, and the generated simplified summary text.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "Implement a report simplification engine in the backend that processes the raw pathological report and prescription text and produces a standardized plain-language summary. The summary must: (a) list key findings in bullet points, (b) translate medical jargon into simple everyday words (e.g., 'hypertension' → 'high blood pressure'), (c) list medications with their purpose and basic dosage instruction in plain terms, and (d) include a 'What to do next' section with actionable steps.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "MedReport Simplified",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

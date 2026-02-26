@@ -1,0 +1,16 @@
+{
+  "frontend/src/index.css": "Global styles with a medical teal-green OKLCH color system, custom Inter/Nunito fonts, mobile-first utilities (safe-area, tap-target), animation keyframes, and component classes for the MediClear app.",
+  "frontend/tailwind.config.js": "Extended Tailwind config with Inter/Nunito font families, medical teal-green color tokens, enhanced border-radius scale, card shadows, and mobile-optimized container settings.",
+  "frontend/src/i18n/translations.ts": "Complete translation objects for 6 languages (English, Hindi, Spanish, French, Arabic, Bengali) covering all UI labels, section headings, and messages used throughout the app.",
+  "frontend/src/lib/medicalSimplifier.ts": "Client-side medical term simplification engine with a deduplicated 150+ term glossary (fixed duplicate keys for `folic acid`, `ot`, and `pt`), functions to extract key findings, parse medications from prescriptions with explicit `string[]` typing for `dosageParts`, and generate actionable health steps.",
+  "frontend/src/hooks/useLanguage.ts": "Custom hook managing the selected display language with localStorage persistence, returning the current language, setter, and translated strings object.",
+  "frontend/src/hooks/useQueries.ts": "React Query hooks for all backend operations: fetching history list, fetching a single summary by ID, and submitting a new report with mutation and cache invalidation.",
+  "frontend/src/components/layout/AppHeader.tsx": "Sticky mobile app header with MediClear logo, dynamic title, back/history/new navigation buttons, and gradient styling consistent across all screens.",
+  "frontend/src/components/layout/AppLayout.tsx": "Layout wrapper composing AppHeader with consistent mobile padding, max-width container, and flexible content area for all app screens.",
+  "frontend/src/pages/SplashScreen.tsx": "Animated splash screen displaying the MediClear logo and branding over a gradient background, auto-navigating to the input screen after 2.8 seconds.",
+  "frontend/src/pages/InputScreen.tsx": "Main input screen with two labeled textareas for pathological reports and prescriptions, client-side simplification on submit, validation, loading states, and footer attribution.",
+  "frontend/src/pages/ResultsScreen.tsx": "Results screen displaying simplified summary in three labeled card sections (Key Findings, Medications, What To Do Next) with language selector dropdown, copy-to-clipboard, and RTL support.",
+  "frontend/src/pages/HistoryScreen.tsx": "History screen listing all processed reports newest-first as tappable cards with timestamps and excerpts, empty state, loading skeletons, and error handling.",
+  "frontend/src/App.tsx": "TanStack Router setup with four routes (splash, input, results/:reportId, history) and RouterProvider wrapping the entire application.",
+  "frontend/index.html": "HTML entry point with mobile-optimized viewport meta tags, PWA-ready apple-mobile-web-app settings, theme color, and font preconnect links."
+}
